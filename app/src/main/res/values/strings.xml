@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">easytracker</string>
     <string name="title_activity_maps">Map</string>
+    <string name="pn_label">Phone Number</string>
+    <string name="pn_placeholder">(123)-456-7890</string>
+    <string name="save_button_text">Save</string>
 </resources>
