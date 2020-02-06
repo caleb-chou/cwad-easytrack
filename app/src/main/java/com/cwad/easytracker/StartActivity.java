@@ -5,12 +5,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,13 +35,10 @@ public class StartActivity extends AppCompatActivity {
 
         final EditText pn = findViewById(R.id.phone_number);
         Button save = findViewById(R.id.save_button);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                phone = pn.getText().toString();
-                settings_editor.putString("pn",phone);
-                settings_editor.apply();
-            }
+        save.setOnClickListener(v -> {
+            phone = pn.getText().toString();
+            settings_editor.putString("pn",phone);
+            settings_editor.apply();
         });
 
 
@@ -62,14 +59,16 @@ public class StartActivity extends AppCompatActivity {
         final EditText message = findViewById(R.id.message_field);
 
         Button send = findViewById(R.id.send_button);
-        send.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                SmsManager sms_manager = SmsManager.getDefault();
-                sms_manager.sendTextMessage(phone, null, message.getText().toString(),null, null);
-                Toast.makeText(getApplicationContext(), "Sent SMS message.", Toast.LENGTH_LONG).show();
-            }
+        send.setOnClickListener(view -> {
+            SmsManager sms_manager = SmsManager.getDefault();
+            sms_manager.sendTextMessage(phone, null, message.getText().toString(),null, null);
+            Toast.makeText(getApplicationContext(), "Sent SMS message.", Toast.LENGTH_LONG).show();
         });
+
+        Button mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener((v) -> {
+            startActivity(new Intent(this, MapsActivity.class));
+        });
+
     }
 }
