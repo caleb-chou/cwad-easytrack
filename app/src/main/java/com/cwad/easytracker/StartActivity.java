@@ -67,7 +67,7 @@ public class StartActivity extends AppCompatActivity {
 
         Button mapBtn = findViewById(R.id.mapBtn);
         mapBtn.setOnClickListener((v) -> {
-            startActivity(new Intent(this, MapsActivity.class));
+            startActivity(new Intent(this, DestinationActivity.class));
         });
 
     }
