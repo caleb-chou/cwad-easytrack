@@ -45,12 +45,20 @@ public class DestinationActivity extends AppCompatActivity {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 300;
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
+    private String destinationName, destinationID, phoneNumber;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destination);
+
+        phoneNumber = getIntent().getStringExtra("PHONE_NUMBER");
+
+        if (phoneNumber == null) {
+            // handle empty phone number
+
+        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
@@ -76,12 +84,26 @@ public class DestinationActivity extends AppCompatActivity {
         Places.initialize(this, getString(R.string.api_key));
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
-        Button destinationBtn = findViewById(R.id.destination_button);
+        Button destinationBtn = findViewById(R.id.destination_btn);
         destinationBtn.setOnClickListener( (v -> {
             Intent autoCompleteIntent = new Autocomplete.IntentBuilder(
                     AutocompleteActivityMode.OVERLAY, fields).build(this);
             startActivityForResult(autoCompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
         }));
+
+        Button startTrackerBtn = findViewById(R.id.start_tracker_btn);
+        startTrackerBtn.setOnClickListener(v -> {
+            if (currentLocation != null && destinationID != null) {
+                Intent startTrackerIntent = new Intent(this, TrackerActivity.class);
+                startTrackerIntent
+                        .putExtra("DESTINATION_NAME", destinationName)
+                        .putExtra("DESTINATION_ID", destinationID)
+                        .putExtra("PHONE_NUMBER", phoneNumber);
+                startActivity(startTrackerIntent);
+            } else {
+                // handle null destination or location
+            }
+        });
 
 
     }
@@ -115,11 +137,12 @@ public class DestinationActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
+                destinationID = place.getId();
+                destinationName = place.getName();
                 TextView destinationText = findViewById(R.id.destination_text);
-                destinationText.setText(place.getName());
-                Log.i("Autocomplete", "Place: " + place.getName() + ", " + place.getId());
+                destinationText.setText("Destination: " + destinationName);
                 if (currentLocation != null){
-                    getInformation(place.getId());
+                    getInformation(destinationID);
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
