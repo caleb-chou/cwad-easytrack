@@ -7,7 +7,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+<<<<<<< HEAD
 import android.content.DialogInterface;
+=======
+import android.content.Intent;
+>>>>>>> f6aaff8b307a5356c10450dc186fab58d61e0dd8
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,9 +21,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+<<<<<<< HEAD
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+=======
+>>>>>>> f6aaff8b307a5356c10450dc186fab58d61e0dd8
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -50,6 +57,7 @@ public class StartActivity extends AppCompatActivity {
 
         final EditText pn = findViewById(R.id.phone_number);
         Button save = findViewById(R.id.save_button);
+<<<<<<< HEAD
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +66,12 @@ public class StartActivity extends AppCompatActivity {
                 settings_editor.apply();
                 Snackbar.make(findViewById(android.R.id.content), "Phone number saved successfully.", Snackbar.LENGTH_SHORT).show();
             }
+=======
+        save.setOnClickListener(v -> {
+            phone = pn.getText().toString();
+            settings_editor.putString("pn",phone);
+            settings_editor.apply();
+>>>>>>> f6aaff8b307a5356c10450dc186fab58d61e0dd8
         });
 
 
@@ -78,16 +92,18 @@ public class StartActivity extends AppCompatActivity {
         final EditText message = findViewById(R.id.message_field);
 
         Button send = findViewById(R.id.send_button);
-        send.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                SmsManager sms_manager = SmsManager.getDefault();
-                sms_manager.sendTextMessage(phone, null, message.getText().toString(),null, null);
-                Toast.makeText(getApplicationContext(), "Sent SMS message.", Toast.LENGTH_LONG).show();
-            }
+        send.setOnClickListener(view -> {
+            SmsManager sms_manager = SmsManager.getDefault();
+            sms_manager.sendTextMessage(phone, null, message.getText().toString(),null, null);
+            Toast.makeText(getApplicationContext(), "Sent SMS message.", Toast.LENGTH_LONG).show();
         });
 
+        Button mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener((v) -> {
+            startActivity(new Intent(this, DestinationActivity.class));
+        });
+
+<<<<<<< HEAD
         final Button contact_picker = findViewById(R.id.pick_contact);
         contact_picker.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -129,5 +145,7 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+=======
+>>>>>>> f6aaff8b307a5356c10450dc186fab58d61e0dd8
     }
 }

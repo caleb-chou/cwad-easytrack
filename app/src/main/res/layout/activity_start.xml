@@ -64,6 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/save_button" />
 
     <Button
+<<<<<<< HEAD
         android:id="@+id/pick_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,4 +74,16 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_field" />
+=======
+        android:id="@+id/mapBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Tracker"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message_field"
+        app:layout_constraintVertical_bias="0.344" />
+>>>>>>> f6aaff8b307a5356c10450dc186fab58d61e0dd8
 </androidx.constraintlayout.widget.ConstraintLayout>
