@@ -77,8 +77,6 @@ public class StartActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Sent SMS message.", Toast.LENGTH_LONG).show();
         });
 
-        Button mapBtn = findViewById(R.id.mapBtn);
-        mapBtn.setOnClickListener((v) -> startActivity(new Intent(this, DestinationActivity.class)));
         final Button contact_picker = findViewById(R.id.pick_contact);
         contact_picker.setOnClickListener(v -> {
             if(checkSelfPermission(Manifest.permission.READ_CONTACTS)!= PackageManager.PERMISSION_GRANTED) {
@@ -101,6 +99,7 @@ public class StartActivity extends AppCompatActivity {
 
                 // Spinner ps = new Spinner(getApplicationContext(), Spinner.MODE_DIALOG);
 
+
                 PopupMenu menu = new PopupMenu(getApplicationContext(), contact_picker);
                 for(String k : contact_info.keySet())
                     menu.getMenu().add(k);
@@ -111,6 +110,12 @@ public class StartActivity extends AppCompatActivity {
                 });
                 menu.show();
             }
+        });
+        Button setTrackerBtn = findViewById(R.id.set_tracker_btn);
+        setTrackerBtn.setOnClickListener((v) -> {
+            Intent setTracker = new Intent(this, DestinationActivity.class);
+            setTracker.putExtra("PHONE_NUMBER", phone);
+            startActivity(setTracker);
         });
     }
 }
