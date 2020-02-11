@@ -46,7 +46,7 @@ public class DestinationActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
     private String destinationName, destinationID, phoneNumber;
-
+    private final String api_key = "API_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class DestinationActivity extends AppCompatActivity {
             }
         });
 
-        Places.initialize(this, getString(R.string.api_key));
+        Places.initialize(this, api_key);
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
         Button destinationBtn = findViewById(R.id.destination_btn);
@@ -146,7 +146,7 @@ public class DestinationActivity extends AppCompatActivity {
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i("Autocomplete", "An error occured: " + status.getStatusMessage());
+                Log.i("Autocomplete", "An error occurred: " + status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
                 Log.i("Autocomplete", "Activity cancelled");
             }
@@ -188,7 +188,7 @@ public class DestinationActivity extends AppCompatActivity {
                 .path("maps/api/directions/json")
                 .appendQueryParameter("origin", origin)
                 .appendQueryParameter("destination", "place_id:" + placeID)
-                .appendQueryParameter("key", getString(R.string.api_key))
+                .appendQueryParameter("key", api_key)
                 .build();
         URL url = null;
         try {

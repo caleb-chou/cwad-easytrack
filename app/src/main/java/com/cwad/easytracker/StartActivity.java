@@ -36,6 +36,7 @@ public class StartActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
@@ -50,7 +51,11 @@ public class StartActivity extends AppCompatActivity {
             phone = pn.getText().toString();
             settings_editor.putString("pn", phone);
             settings_editor.apply();
-            Snackbar.make(findViewById(android.R.id.content), "Phone number saved successfully.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Phone number saved successfully.",
+                    Snackbar.LENGTH_SHORT
+            ).show();
         });
 
 
@@ -74,7 +79,11 @@ public class StartActivity extends AppCompatActivity {
         send.setOnClickListener(view -> {
             SmsManager sms_manager = SmsManager.getDefault();
             sms_manager.sendTextMessage(phone, null, message.getText().toString(),null, null);
-            Toast.makeText(getApplicationContext(), "Sent SMS message.", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Sent SMS message.",
+                    Toast.LENGTH_LONG
+            ).show();
         });
 
         final Button contact_picker = findViewById(R.id.pick_contact);
@@ -85,12 +94,31 @@ public class StartActivity extends AppCompatActivity {
                         GET_CONTACTS_CODE);
             }
             else {
-                Toast.makeText(getApplicationContext(), "Contact permissions granted.", Toast.LENGTH_SHORT).show();
-                Cursor contacts = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null, null);
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Contact permissions granted.",
+                        Toast.LENGTH_SHORT
+                ).show();
+                Cursor contacts = getContentResolver().query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
                 final Map<String, String> contact_info = new HashMap<>();
                 while (contacts.moveToNext()) {
-                    String name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_PRIMARY));
-                    String phone_number = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String name = contacts.getString(
+                            contacts.getColumnIndex(
+                                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_PRIMARY
+                            )
+                    );
+                    String phone_number = contacts.getString(
+                            contacts.getColumnIndex(
+                                    ContactsContract.CommonDataKinds.Phone.NUMBER
+                            )
+                    );
                     contact_info.put(name, phone_number);
                 }
                 for(String k : contact_info.keySet())
@@ -113,7 +141,10 @@ public class StartActivity extends AppCompatActivity {
         });
         Button setTrackerBtn = findViewById(R.id.set_tracker_btn);
         setTrackerBtn.setOnClickListener((v) -> {
-            Intent setTracker = new Intent(this, DestinationActivity.class);
+            Intent setTracker = new Intent(
+                    this,
+                    DestinationActivity.class
+            );
             setTracker.putExtra("PHONE_NUMBER", phone);
             startActivity(setTracker);
         });

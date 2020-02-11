@@ -2,6 +2,7 @@ package com.cwad.easytracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 

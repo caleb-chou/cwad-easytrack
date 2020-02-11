@@ -82,4 +82,14 @@
         android:text="Set Tracker"
         app:layout_constraintStart_toEndOf="@+id/pick_contact"
         app:layout_constraintTop_toBottomOf="@+id/message_field" />
+
+    <TextView
+        android:id="@+id/apikeytext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/api_key"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pick_contact" />
 </androidx.constraintlayout.widget.ConstraintLayout>
