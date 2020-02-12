@@ -6,12 +6,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ public class TrackerActivity extends AppCompatActivity {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private String apiKey;
+    private boolean reached = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +123,8 @@ public class TrackerActivity extends AppCompatActivity {
                                 .getJSONObject(0)
                                 .getJSONArray("legs")
                                 .getJSONObject(0);
-                        String duration = legs.getJSONObject("duration").getString("text");
-                        String distance = legs.getJSONObject("distance").getString("text");
+                        // String duration = legs.getJSONObject("duration").getString("text");
+                        int distance = legs.getJSONObject("distance").getInt("value");
                         sendSMS(distance);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -152,10 +156,28 @@ public class TrackerActivity extends AppCompatActivity {
         return url;
     }
 
-    protected String sendSMS(String distanceString){
-        int distance = Integer.valueOf(distanceString);
+    protected String sendSMS(int distance){
+        // int distance = Integer.valueOf(distanceString);
         // write logic for what to do with certain distances and send SMS when
+        if( distance < 100 ) {
+            SharedPreferences settings = getSharedPreferences("user_settings", Context.MODE_PRIVATE);
+            String pn = settings.getString("pn","");
+            SmsManager sms_manager = SmsManager.getDefault();
+            sms_manager.sendTextMessage(
+                    pn,
+                    null,
+                    "Arrived at destination.",
+                    null,
+                    null
+            );
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Sent SMS message.",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return "Sent SMS";
+        }
 
-        return "";  // return something to display SMS sent on GUI
+        return "Nothing";  // return something to display SMS sent on GUI
     }
 }

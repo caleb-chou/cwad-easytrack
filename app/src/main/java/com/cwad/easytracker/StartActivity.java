@@ -1,6 +1,7 @@
 package com.cwad.easytracker;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -41,10 +42,17 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         SharedPreferences settings
-                = PreferenceManager.getDefaultSharedPreferences(StartActivity.this);
+                = getSharedPreferences("user_settings", Context.MODE_PRIVATE);
         final SharedPreferences.Editor settings_editor = settings.edit();
 
         final EditText pn = findViewById(R.id.phone_number);
+        pn.setText(
+                settings.getString(
+                        "pn",
+                        ""
+                )
+        );
+
         Button save = findViewById(R.id.save_button);
 
         save.setOnClickListener(v -> {
@@ -78,7 +86,13 @@ public class StartActivity extends AppCompatActivity {
         Button send = findViewById(R.id.send_button);
         send.setOnClickListener(view -> {
             SmsManager sms_manager = SmsManager.getDefault();
-            sms_manager.sendTextMessage(phone, null, message.getText().toString(),null, null);
+            sms_manager.sendTextMessage(
+                    phone,
+                    null,
+                    message.getText().toString(),
+                    null,
+                    null
+            );
             Toast.makeText(
                     getApplicationContext(),
                     "Sent SMS message.",
