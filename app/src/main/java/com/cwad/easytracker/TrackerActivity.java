@@ -113,27 +113,29 @@ public class TrackerActivity extends AppCompatActivity {
                 Looper.getMainLooper());
     }
 
-    protected void updateGUI(){
-        String url = getURL(destinationID).toString();
-        RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        JSONObject legs = response.getJSONArray("routes")
-                                .getJSONObject(0)
-                                .getJSONArray("legs")
-                                .getJSONObject(0);
-                        // String duration = legs.getJSONObject("duration").getString("text");
-                        int distance = legs.getJSONObject("distance").getInt("value");
-                        sendSMS(distance);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-                    // TODO: Handle error
-                    Log.e("Error", "Exception: ", error);
-                });
-        queue.add(jsonObjectRequest);
+    protected void updateGUI() {
+        if(!reached){
+            String url = getURL(destinationID).toString();
+            RequestQueue queue = Volley.newRequestQueue(this);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                    response -> {
+                        try {
+                            JSONObject legs = response.getJSONArray("routes")
+                                    .getJSONObject(0)
+                                    .getJSONArray("legs")
+                                    .getJSONObject(0);
+                            // String duration = legs.getJSONObject("duration").getString("text");
+                            int distance = legs.getJSONObject("distance").getInt("value");
+                            sendSMS(distance);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }, error -> {
+                // TODO: Handle error
+                Log.e("Error", "Exception: ", error);
+            });
+            queue.add(jsonObjectRequest);
+        }
     }
 
     protected URL getURL(String placeID){
@@ -163,10 +165,11 @@ public class TrackerActivity extends AppCompatActivity {
             SharedPreferences settings = getSharedPreferences("user_settings", Context.MODE_PRIVATE);
             String pn = settings.getString("pn","");
             SmsManager sms_manager = SmsManager.getDefault();
+            String message = settings.getString("message","");
             sms_manager.sendTextMessage(
                     pn,
                     null,
-                    "Arrived at destination.",
+                    (message.length() == 0) ? "Arrived at destination." : message,
                     null,
                     null
             );
@@ -175,6 +178,7 @@ public class TrackerActivity extends AppCompatActivity {
                     "Sent SMS message.",
                     Toast.LENGTH_SHORT
             ).show();
+            reached = true;
             return "Sent SMS";
         }
 

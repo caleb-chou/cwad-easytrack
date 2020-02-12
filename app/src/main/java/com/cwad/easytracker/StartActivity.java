@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.widget.Button;
@@ -82,20 +81,15 @@ public class StartActivity extends AppCompatActivity {
             ).show();
 
         final EditText message = findViewById(R.id.message_field);
+        message.setText(settings.getString("message",""));
 
-        Button send = findViewById(R.id.send_button);
-        send.setOnClickListener(view -> {
-            SmsManager sms_manager = SmsManager.getDefault();
-            sms_manager.sendTextMessage(
-                    phone,
-                    null,
-                    message.getText().toString(),
-                    null,
-                    null
-            );
+        Button message_save = findViewById(R.id.message_save_button);
+        message_save.setOnClickListener(view -> {
+            settings_editor.putString("message",message.getText().toString());
+            settings_editor.apply();
             Toast.makeText(
                     getApplicationContext(),
-                    "Sent SMS message.",
+                    "Saved SMS message.",
                     Toast.LENGTH_LONG
             ).show();
         });
