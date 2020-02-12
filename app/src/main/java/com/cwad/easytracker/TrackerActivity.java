@@ -1,12 +1,19 @@
 package com.cwad.easytracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +33,7 @@ import java.net.URL;
 
 public class TrackerActivity extends AppCompatActivity {
 
+    private static final int BACKGROUND_LOCATION_REQUEST_CODE = 400;
     private String destinationName, destinationID, phoneNumber;
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
@@ -42,6 +50,15 @@ public class TrackerActivity extends AppCompatActivity {
         destinationID = getIntent().getStringExtra("DESTINATION_ID");
         phoneNumber = getIntent().getStringExtra("PHONE_NUMBER");
         apiKey = getString(R.string.api_key);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                    BACKGROUND_LOCATION_REQUEST_CODE);
+        }
+
+
         locationRequest = createLocationRequest();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback(){
@@ -57,6 +74,19 @@ public class TrackerActivity extends AppCompatActivity {
             }
         };
         startLocationUpdates();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == BACKGROUND_LOCATION_REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.i("Permission", "ACCESS_BACKGROUND_LOCATION permission granted");
+            } else {
+                Toast.makeText(this, "App needs to access background location services to function",
+                        Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, StartActivity.class));
+            }
+        }
     }
 
     protected LocationRequest createLocationRequest() {
