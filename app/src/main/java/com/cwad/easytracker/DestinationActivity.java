@@ -45,8 +45,7 @@ public class DestinationActivity extends AppCompatActivity {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 300;
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
-    private String destinationName, destinationID, phoneNumber;
-    private final String api_key = "API_KEY";
+    private String destinationName, destinationID, phoneNumber, apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,8 @@ public class DestinationActivity extends AppCompatActivity {
             // handle empty phone number
 
         }
+
+        apiKey = getString(R.string.api_key);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
@@ -81,7 +82,7 @@ public class DestinationActivity extends AppCompatActivity {
             }
         });
 
-        Places.initialize(this, api_key);
+        Places.initialize(this, apiKey);
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
         Button destinationBtn = findViewById(R.id.destination_btn);
@@ -98,7 +99,8 @@ public class DestinationActivity extends AppCompatActivity {
                 startTrackerIntent
                         .putExtra("DESTINATION_NAME", destinationName)
                         .putExtra("DESTINATION_ID", destinationID)
-                        .putExtra("PHONE_NUMBER", phoneNumber);
+                        .putExtra("PHONE_NUMBER", phoneNumber)
+                        .putExtra("CURRENT_LOCATION", currentLocation);
                 startActivity(startTrackerIntent);
             } else {
                 // handle null destination or location
@@ -188,7 +190,7 @@ public class DestinationActivity extends AppCompatActivity {
                 .path("maps/api/directions/json")
                 .appendQueryParameter("origin", origin)
                 .appendQueryParameter("destination", "place_id:" + placeID)
-                .appendQueryParameter("key", api_key)
+                .appendQueryParameter("key", apiKey)
                 .build();
         URL url = null;
         try {
