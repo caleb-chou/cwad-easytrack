@@ -29,9 +29,9 @@ import static android.Manifest.permission.SEND_SMS;
 
 public class StartActivity extends AppCompatActivity {
 
-    String phone;
-    int SMS_PERMISSION_CODE;
-    int GET_CONTACTS_CODE;
+    private String phone;
+    private int SMS_PERMISSION_CODE;
+    private int GET_CONTACTS_CODE;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
